@@ -381,7 +381,7 @@ configure() {
 	check_out_dir
 
 	pkg_name="AdGuardHome_${os}_${cpu}.${pkg_ext}"
-	url="https://static.adguard.com/adguardhome/${channel}/${pkg_name}"
+	url="http://192.168.1.15/chfs/shared/AdGuardHome_linux_arm64.tar.gz"
 	agh_dir="${out_dir}/AdGuardHome"
 	readonly pkg_name url agh_dir
 
