@@ -13,7 +13,7 @@ EOF
 
 echo "replace /etc/apt/sources.list.d/raspi.list"
 cat << EOF > /etc/apt/sources.list.d/raspi.list
-deb http://mirrors.tuna.tsinghua.edu.cn/raspberrypi/ bullseye main 
+deb http://archive.raspbian.org/raspbian bullseye main 
 EOF
 
 echo "[电气罐头] 替换完成"
