@@ -381,7 +381,7 @@ configure() {
 	check_out_dir
 
 	pkg_name="AdGuardHome_${os}_${cpu}.${pkg_ext}"
-	url="https://download.fastgit.org/AdguardTeam/AdGuardHome/releases/download/v0.107.6/AdGuardHome_linux_arm64.tar.gz"
+	url="https://ghproxy.com/https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.7/AdGuardHome_linux_arm64.tar.gz"
 	agh_dir="${out_dir}/AdGuardHome"
 	readonly pkg_name url agh_dir
 
@@ -416,7 +416,7 @@ please, restart it with root privileges'
 # TODO(e.burkov): Try to avoid restarting.
 rerun_with_root() {
 	script_url=\
-'https://pd.zwc365.com/seturl/https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh'
+'https://ghproxy.com/https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts/install.sh'
 	readonly script_url
 
 	r='-R'
