@@ -39,21 +39,14 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '${{ env.NODE_VERSION }}'
+          cache: 'npm'
+          cache-dependency-path: 'client/package-lock.json'
       - name: Set up Go modules cache
         uses: actions/cache@v5
         with:
           path: ~/go/pkg/mod
-          key: "${{ runner.os }}-go-${{ hashFiles('go.sum') }}"
+          key: '${{ runner.os }}-go-${{ hashFiles(''go.sum'') }}'
           restore-keys: '${{ runner.os }}-go-'
-      - name: Get npm cache directory
-        id: npm-cache
-        run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
-      - name: Set up npm cache
-        uses: actions/cache@v5
-        with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: "${{ runner.os }}-node-${{ hashFiles('client/package-lock.json') }}"
-          restore-keys: '${{ runner.os }}-node-'
       - name: Run tests
         shell: bash
         run: make VERBOSE=1 deps test go-bench go-fuzz
@@ -82,21 +75,14 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '${{ env.NODE_VERSION }}'
+          cache: 'npm'
+          cache-dependency-path: 'client/package-lock.json'
       - name: Set up Go modules cache
         uses: actions/cache@v5
         with:
           path: ~/go/pkg/mod
-          key: "${{ runner.os }}-go-${{ hashFiles('go.sum') }}"
+          key: '${{ runner.os }}-go-${{ hashFiles(''go.sum'') }}'
           restore-keys: '${{ runner.os }}-go-'
-      - name: Get npm cache directory
-        id: npm-cache
-        run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
-      - name: Set up npm cache
-        uses: actions/cache@v5
-        with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: "${{ runner.os }}-node-${{ hashFiles('client/package-lock.json') }}"
-          restore-keys: '${{ runner.os }}-node-'
       - name: Set up Snapcraft
         run: sudo snap install snapcraft --classic
       - name: Set up QEMU
