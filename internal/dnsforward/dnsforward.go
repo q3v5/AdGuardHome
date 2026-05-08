@@ -565,6 +565,7 @@ func (s *Server) prepareUpstreamSettings(ctx context.Context, boot upstream.Reso
 		RootCAs:      s.conf.TLSv12Roots,
 		CipherSuites: s.conf.TLSCiphers,
 	}
+	setDNSRequestDeviceOptions(opts, s.conf.DNSRequestDevice)
 
 	uc, err := newUpstreamConfig(ctx, s.logger, upstreams, defaultDNS, opts)
 	if err != nil {
@@ -578,7 +579,7 @@ func (s *Server) prepareUpstreamSettings(ctx context.Context, boot upstream.Reso
 		BootstrapPreferIPv6:     s.conf.BootstrapPreferIPv6,
 		EDNSClientSubnetEnabled: s.conf.EDNSClientSubnet.Enabled,
 		UseHTTP3Upstreams:       s.conf.UseHTTP3Upstreams,
-		ClientID:                s.conf.ClientID,
+		UserAgent:              getDNSRequestDeviceUserAgent(s.conf.DNSRequestDevice),
 	})
 
 	return nil

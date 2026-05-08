@@ -159,3 +159,26 @@ func setProxyUpstreamMode(
 
 	return nil
 }
+
+// setDNSRequestDeviceOptions sets the UserAgent field in opts based on the
+// DNSRequestDevice configuration. If DNSRequestDevice is nil or not enabled,
+// opts remains unchanged.
+func setDNSRequestDeviceOptions(opts *upstream.Options, device *DNSRequestDevice) {
+	if device == nil || !device.Enabled {
+		return
+	}
+
+	if device.UserAgent != "" {
+		opts.UserAgent = device.UserAgent
+	}
+}
+
+// getDNSRequestDeviceUserAgent returns the UserAgent from DNSRequestDevice
+// configuration if enabled, otherwise returns empty string.
+func getDNSRequestDeviceUserAgent(device *DNSRequestDevice) string {
+	if device == nil || !device.Enabled {
+		return ""
+	}
+
+	return device.UserAgent
+}
