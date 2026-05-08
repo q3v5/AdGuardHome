@@ -26,6 +26,7 @@ const dnsConfig = handleActions(
                 bootstrap_dns,
                 local_ptr_upstreams,
                 ratelimit_whitelist,
+                dns_request_device,
                 ...values
             } = payload;
 
@@ -39,6 +40,10 @@ const dnsConfig = handleActions(
                 bootstrap_dns: (bootstrap_dns && bootstrap_dns.join('\n')) || '',
                 local_ptr_upstreams: (local_ptr_upstreams && local_ptr_upstreams.join('\n')) || '',
                 ratelimit_whitelist: (ratelimit_whitelist && ratelimit_whitelist.join('\n')) || '',
+                dns_request_device: {
+                    enabled: dns_request_device?.enabled ?? false,
+                    user_agent: dns_request_device?.user_agent ?? '',
+                },
                 processingGetConfig: false,
                 upstream_mode: upstream_mode === '' ? DNS_REQUEST_OPTIONS.LOAD_BALANCING : upstream_mode,
             };

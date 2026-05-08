@@ -335,6 +335,10 @@ export type DnsConfigData = {
     cache_ttl_min?: number;
     cache_optimistic?: boolean;
     client_id?: string;
+    dns_request_device?: {
+        enabled: boolean;
+        user_agent: string;
+    };
 };
 
 export type FilteringData = {
