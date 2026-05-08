@@ -225,7 +225,6 @@ func newCustomUpstreamConfig(
 			Timeout:      conf.UpstreamTimeout,
 			HTTPVersions: aghnet.UpstreamHTTPVersions(conf.UseHTTP3Upstreams),
 			PreferIPv6:   conf.BootstrapPreferIPv6,
-			ClientID:     conf.ClientID,
 		},
 	)
 	if err != nil {
