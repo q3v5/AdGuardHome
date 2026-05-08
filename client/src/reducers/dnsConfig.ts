@@ -71,6 +71,7 @@ const dnsConfig = handleActions(
         disable_ipv6: false,
         dnssec_enabled: false,
         upstream_dns_file: '',
+        client_id: '',
     },
 );
 

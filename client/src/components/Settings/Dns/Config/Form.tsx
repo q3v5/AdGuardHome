@@ -25,6 +25,7 @@ type FormData = {
     blocking_ipv4?: string;
     blocking_ipv6?: string;
     blocked_response_ttl: number;
+    client_id: string;
 };
 
 type Props = {
@@ -371,6 +372,27 @@ const Form = ({ processing, initialValues, onSubmit }: Props) => {
                                         const { value } = e.target;
                                         field.onChange(toNumber(value));
                                     }}
+                                />
+                            )}
+                        />
+                    </div>
+                </div>
+
+                <div className="col-12 col-md-7">
+                    <div className="form__group form__group--settings">
+                        <Controller
+                            name="client_id"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <Input
+                                    {...field}
+                                    data-testid="dns_config_client_id"
+                                    type="text"
+                                    label={t('custom_client_id')}
+                                    desc={t('custom_client_id_desc')}
+                                    placeholder={t('custom_client_id_placeholder')}
+                                    error={fieldState.error?.message}
+                                    disabled={processing}
                                 />
                             )}
                         />
