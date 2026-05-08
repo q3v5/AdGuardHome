@@ -579,7 +579,7 @@ func (s *Server) prepareUpstreamSettings(ctx context.Context, boot upstream.Reso
 		BootstrapPreferIPv6:     s.conf.BootstrapPreferIPv6,
 		EDNSClientSubnetEnabled: s.conf.EDNSClientSubnet.Enabled,
 		UseHTTP3Upstreams:       s.conf.UseHTTP3Upstreams,
-		UserAgent:              getDNSRequestDeviceUserAgent(s.conf.DNSRequestDevice),
+		UserAgent:               getDNSRequestDeviceUserAgent(s.conf.DNSRequestDevice),
 	})
 
 	return nil

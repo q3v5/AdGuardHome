@@ -24,7 +24,7 @@ type CommonUpstreamConfig struct {
 	BootstrapPreferIPv6     bool
 	EDNSClientSubnetEnabled bool
 	UseHTTP3Upstreams       bool
-	UserAgent              string
+	UserAgent               string
 }
 
 // customUpstreamConfig contains custom client upstream configuration and the
