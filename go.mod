@@ -126,6 +126,9 @@ ignore (
 	node_modules
 )
 
+// Replace dnsproxy with local modified version that includes ClientID support
+replace github.com/AdguardTeam/dnsproxy => ./lib/dnsproxy
+
 tool (
 	github.com/fzipp/gocyclo/cmd/gocyclo
 	github.com/golangci/misspell/cmd/misspell

@@ -24,6 +24,7 @@ type CommonUpstreamConfig struct {
 	BootstrapPreferIPv6     bool
 	EDNSClientSubnetEnabled bool
 	UseHTTP3Upstreams       bool
+	ClientID                string
 }
 
 // customUpstreamConfig contains custom client upstream configuration and the
@@ -224,6 +225,7 @@ func newCustomUpstreamConfig(
 			Timeout:      conf.UpstreamTimeout,
 			HTTPVersions: aghnet.UpstreamHTTPVersions(conf.UseHTTP3Upstreams),
 			PreferIPv6:   conf.BootstrapPreferIPv6,
+			ClientID:     conf.ClientID,
 		},
 	)
 	if err != nil {

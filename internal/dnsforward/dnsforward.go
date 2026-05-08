@@ -559,6 +559,7 @@ func (s *Server) prepareUpstreamSettings(ctx context.Context, boot upstream.Reso
 		// TODO(a.garipov): Investigate if that's true.
 		RootCAs:      s.conf.TLSv12Roots,
 		CipherSuites: s.conf.TLSCiphers,
+		ClientID:     s.conf.ClientID,
 	})
 	if err != nil {
 		return fmt.Errorf("preparing upstream config: %w", err)
@@ -571,6 +572,7 @@ func (s *Server) prepareUpstreamSettings(ctx context.Context, boot upstream.Reso
 		BootstrapPreferIPv6:     s.conf.BootstrapPreferIPv6,
 		EDNSClientSubnetEnabled: s.conf.EDNSClientSubnet.Enabled,
 		UseHTTP3Upstreams:       s.conf.UseHTTP3Upstreams,
+		ClientID:                s.conf.ClientID,
 	})
 
 	return nil
