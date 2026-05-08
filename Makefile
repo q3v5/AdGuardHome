@@ -35,7 +35,7 @@ RACE = 0
 REVISION = $${REVISION:-$$(git rev-parse --short HEAD)}
 SIGN = 1
 SIGNER_API_KEY = not-a-real-key
-VERSION = v0.0.0
+VERSION = v0.60.0
 
 NEXTAPI = 0
 
