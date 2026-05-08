@@ -26,6 +26,8 @@ type FormData = {
     blocking_ipv6?: string;
     blocked_response_ttl: number;
     client_id: string;
+    dns_request_device_enabled: boolean;
+    dns_request_device_user_agent: string;
 };
 
 type Props = {
@@ -118,6 +120,7 @@ const Form = ({ processing, initialValues, onSubmit }: Props) => {
     const blocking_mode = watch('blocking_mode');
     const edns_cs_enabled = watch('edns_cs_enabled');
     const edns_cs_use_custom = watch('edns_cs_use_custom');
+    const dns_request_device_enabled = watch('dns_request_device_enabled');
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -377,6 +380,47 @@ const Form = ({ processing, initialValues, onSubmit }: Props) => {
                         />
                     </div>
                 </div>
+
+                <div className="col-12">
+                    <div className="form__group form__group--settings">
+                        <Controller
+                            name="dns_request_device_enabled"
+                            control={control}
+                            render={({ field }) => (
+                                <Checkbox
+                                    {...field}
+                                    data-testid="dns_config_dns_request_device_enabled"
+                                    title={t('dns_request_device_enable')}
+                                    subtitle={t('dns_request_device_enable_desc')}
+                                    disabled={processing}
+                                />
+                            )}
+                        />
+                    </div>
+                </div>
+
+                {dns_request_device_enabled && (
+                    <div className="col-12 col-md-7">
+                        <div className="form__group form__group--settings">
+                            <Controller
+                                name="dns_request_device_user_agent"
+                                control={control}
+                                render={({ field, fieldState }) => (
+                                    <Input
+                                        {...field}
+                                        data-testid="dns_config_dns_request_device_user_agent"
+                                        type="text"
+                                        label={t('dns_request_device_user_agent')}
+                                        desc={t('dns_request_device_user_agent_desc')}
+                                        placeholder={t('dns_request_device_user_agent_placeholder')}
+                                        error={fieldState.error?.message}
+                                        disabled={processing}
+                                    />
+                                )}
+                            />
+                        </div>
+                    </div>
+                )}
 
                 <div className="col-12 col-md-7">
                     <div className="form__group form__group--settings">

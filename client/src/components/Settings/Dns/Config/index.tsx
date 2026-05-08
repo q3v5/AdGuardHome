@@ -27,6 +27,7 @@ const Config = () => {
         disable_ipv6,
         processingSetConfig,
         client_id,
+        dns_request_device,
     } = useSelector((state: RootState) => state.dnsConfig, shallowEqual);
 
     const handleFormSubmit = (values: any) => {
@@ -52,6 +53,8 @@ const Config = () => {
                         edns_cs_use_custom,
                         edns_cs_custom_ip,
                         client_id,
+                        dns_request_device_enabled: dns_request_device?.enabled ?? false,
+                        dns_request_device_user_agent: dns_request_device?.user_agent ?? '',
                     }}
                     onSubmit={handleFormSubmit}
                     processing={processingSetConfig}
