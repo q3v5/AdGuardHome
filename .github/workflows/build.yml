@@ -51,7 +51,7 @@ jobs:
       - name: Set up npm cache
         uses: actions/cache@v5
         with:
-          path: '${{ steps.npm-cache.outputs.dir }}'
+          path: ${{ steps.npm-cache.outputs.dir }}
           key: "${{ runner.os }}-node-${{ hashFiles('client/package-lock.json') }}"
           restore-keys: '${{ runner.os }}-node-'
       - name: Run tests
@@ -94,7 +94,7 @@ jobs:
       - name: Set up npm cache
         uses: actions/cache@v5
         with:
-          path: '${{ steps.npm-cache.outputs.dir }}'
+          path: ${{ steps.npm-cache.outputs.dir }}
           key: "${{ runner.os }}-node-${{ hashFiles('client/package-lock.json') }}"
           restore-keys: '${{ runner.os }}-node-'
       - name: Set up Snapcraft
