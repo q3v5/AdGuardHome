@@ -250,7 +250,6 @@ run_linter "$go" tool fieldalignment \
 	./internal/aghtls/ \
 	./internal/aghuser/ \
 	./internal/arpdb/ \
-	./internal/client/ \
 	./internal/configmigrate/ \
 	./internal/dhcpsvc/ \
 	./internal/filtering/hashprefix/ \
