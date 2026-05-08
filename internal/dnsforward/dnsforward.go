@@ -564,9 +564,7 @@ func (s *Server) prepareUpstreamSettings(ctx context.Context, boot upstream.Reso
 		// TODO(a.garipov): Investigate if that's true.
 		RootCAs:      s.conf.TLSv12Roots,
 		CipherSuites: s.conf.TLSCiphers,
-		ClientID:     s.conf.ClientID,
 	}
-	setDNSRequestDeviceOptions(opts, s.conf.DNSRequestDevice)
 
 	uc, err := newUpstreamConfig(ctx, s.logger, upstreams, defaultDNS, opts)
 	if err != nil {
