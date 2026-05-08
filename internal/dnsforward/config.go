@@ -169,6 +169,11 @@ type Config struct {
 	// BootstrapPreferIPv6, if true, instructs the bootstrapper to prefer IPv6
 	// addresses to IPv4 ones for DoH, DoQ, and DoT.
 	BootstrapPreferIPv6 bool `yaml:"bootstrap_prefer_ipv6"`
+
+	// ClientID is a custom identifier sent in the HTTP User-Agent header for
+	// DNS-over-HTTPS, DNS-over-QUIC, and DNS-over-TLS requests.  This allows
+	// the upstream DNS server to identify the client software.
+	ClientID string `yaml:"client_id"`
 }
 
 // EDNSClientSubnet is the settings list for EDNS Client Subnet.
