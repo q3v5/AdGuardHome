@@ -439,11 +439,11 @@ func (h *healthchecker) check(u upstream.Upstream) (err error) {
 // validateDNSRequestDevice validates the DNSRequestDevice configuration.
 // It returns an error if the configuration is invalid.
 func validateDNSRequestDevice(d *DNSRequestDevice) (err error) {
-	if d == nil {
+	if d == nil || !d.Enabled {
 		return nil
 	}
 
-	if d.Enabled && d.UserAgent == "" {
+	if d.UserAgent == "" {
 		return errors.Error("user_agent is required when dns_request_device is enabled")
 	}
 

@@ -125,6 +125,9 @@ type jsonDNSConfig struct {
 	// systemResolvers to the front-end.  It's not a pointer to the slice since
 	// there is no need to omit it while decoding from JSON.
 	DefaultLocalPTRUpstreams []string `json:"default_local_ptr_upstreams,omitempty"`
+
+	// DNSRequestDevice contains custom device identification settings.
+	DNSRequestDevice *DNSRequestDevice `json:"dns_request_device,omitempty"`
 }
 
 // jsonUpstreamMode is a enumeration of upstream modes.
@@ -223,6 +226,7 @@ func (s *Server) getDNSConfig(ctx context.Context) (c *jsonDNSConfig) {
 		LocalPTRUpstreams:        &localPTRUpstreams,
 		DefaultLocalPTRUpstreams: defPTRUps,
 		DisabledUntil:            protectionDisabledUntil,
+		DNSRequestDevice:         s.conf.DNSRequestDevice,
 	}
 }
 
@@ -324,6 +328,12 @@ func (req *jsonDNSConfig) validate(
 	}
 
 	err = req.checkUpstreamTimeout()
+	if err != nil {
+		// Don't wrap the error since it's informative enough as is.
+		return err
+	}
+
+	err = validateDNSRequestDevice(req.DNSRequestDevice)
 	if err != nil {
 		// Don't wrap the error since it's informative enough as is.
 		return err
@@ -673,6 +683,11 @@ func (s *Server) setConfigRestartable(dc *jsonDNSConfig) (shouldRestart bool) {
 		if shouldRestart {
 			break
 		}
+	}
+
+	if dc.DNSRequestDevice != nil {
+		s.conf.DNSRequestDevice = dc.DNSRequestDevice
+		shouldRestart = true
 	}
 
 	if dc.Ratelimit != nil && s.conf.Ratelimit != *dc.Ratelimit {

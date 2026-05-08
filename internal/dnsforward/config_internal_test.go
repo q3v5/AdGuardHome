@@ -1,57 +1,130 @@
 package dnsforward
 
 import (
-	"slices"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
-func TestAnyNameMatches(t *testing.T) {
-	dnsNames := []string{"host1", "*.host2", "1.2.3.4"}
-	slices.Sort(dnsNames)
-
+func TestValidateDNSRequestDevice(t *testing.T) {
 	testCases := []struct {
 		name    string
-		dnsName string
-		want    bool
+		device  *DNSRequestDevice
+		wantErr bool
 	}{{
-		name:    "match",
-		dnsName: "host1",
-		want:    true,
+		name:    "nil_device",
+		device:  nil,
+		wantErr: false,
 	}, {
-		name:    "match",
-		dnsName: "a.host2",
-		want:    true,
+		name: "disabled_no_user_agent",
+		device: &DNSRequestDevice{
+			Enabled:   false,
+			UserAgent: "",
+		},
+		wantErr: false,
 	}, {
-		name:    "match",
-		dnsName: "b.a.host2",
-		want:    true,
+		name: "disabled_with_user_agent",
+		device: &DNSRequestDevice{
+			Enabled:   false,
+			UserAgent: "TestAgent/1.0",
+		},
+		wantErr: false,
 	}, {
-		name:    "match",
-		dnsName: "1.2.3.4",
-		want:    true,
+		name: "enabled_with_user_agent",
+		device: &DNSRequestDevice{
+			Enabled:   true,
+			UserAgent: "TestAgent/1.0",
+		},
+		wantErr: false,
 	}, {
-		name:    "mismatch_bad_ip",
-		dnsName: "1.2.3.256",
-		want:    false,
+		name: "enabled_without_user_agent",
+		device: &DNSRequestDevice{
+			Enabled:   true,
+			UserAgent: "",
+		},
+		wantErr: true,
 	}, {
-		name:    "mismatch",
-		dnsName: "host2",
-		want:    false,
+		name: "enabled_user_agent_too_long",
+		device: &DNSRequestDevice{
+			Enabled:   true,
+			UserAgent: strings.Repeat("a", maxUserAgentLen+1),
+		},
+		wantErr: true,
 	}, {
-		name:    "mismatch",
-		dnsName: "",
-		want:    false,
+		name: "enabled_user_agent_with_newline",
+		device: &DNSRequestDevice{
+			Enabled:   true,
+			UserAgent: "Test\nAgent",
+		},
+		wantErr: true,
 	}, {
-		name:    "mismatch",
-		dnsName: "*.host2",
-		want:    false,
+		name: "enabled_user_agent_with_carriage_return",
+		device: &DNSRequestDevice{
+			Enabled:   true,
+			UserAgent: "Test\rAgent",
+		},
+		wantErr: true,
+	}, {
+		name: "enabled_user_agent_with_tab",
+		device: &DNSRequestDevice{
+			Enabled:   true,
+			UserAgent: "Test\tAgent",
+		},
+		wantErr: true,
 	}}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.want, anyNameMatches(dnsNames, tc.dnsName))
+			err := validateDNSRequestDevice(tc.device)
+			if tc.wantErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestIsValidUserAgent(t *testing.T) {
+	testCases := []struct {
+		name string
+		ua   string
+		want bool
+	}{{
+		name: "empty",
+		ua:   "",
+		want: true,
+	}, {
+		name: "valid_simple",
+		ua:   "TestAgent/1.0",
+		want: true,
+	}, {
+		name: "valid_with_spaces",
+		ua:   "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+		want: true,
+	}, {
+		name: "invalid_newline",
+		ua:   "Test\nAgent",
+		want: false,
+	}, {
+		name: "invalid_carriage_return",
+		ua:   "Test\rAgent",
+		want: false,
+	}, {
+		name: "invalid_tab",
+		ua:   "Test\tAgent",
+		want: false,
+	}, {
+		name: "invalid_control_char",
+		ua:   "Test\x01Agent",
+		want: false,
+	}}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.want, isValidUserAgent(tc.ua))
 		})
 	}
 }
