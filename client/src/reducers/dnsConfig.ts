@@ -52,11 +52,23 @@ const dnsConfig = handleActions(
             ...state,
             processingSetConfig: false,
         }),
-        [actions.setDnsConfigSuccess.toString()]: (state, { payload }: any) => ({
-            ...state,
-            ...payload,
-            processingSetConfig: false,
-        }),
+        [actions.setDnsConfigSuccess.toString()]: (state, { payload }: any) => {
+            const {
+                dns_request_device_enabled,
+                dns_request_device_user_agent,
+                ...rest
+            } = payload;
+
+            return {
+                ...state,
+                ...rest,
+                dns_request_device: {
+                    enabled: !!dns_request_device_enabled,
+                    user_agent: dns_request_device_user_agent || '',
+                },
+                processingSetConfig: false,
+            };
+        },
     },
     {
         processingGetConfig: false,

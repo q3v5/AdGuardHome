@@ -68,6 +68,16 @@ export const setDnsConfig = (config: any) => async (dispatch: any) => {
             hasDnsSettings = true;
         }
 
+        if (Object.prototype.hasOwnProperty.call(data, 'dns_request_device_enabled') ||
+            Object.prototype.hasOwnProperty.call(data, 'dns_request_device_user_agent')) {
+            data.dns_request_device = {
+                enabled: !!data.dns_request_device_enabled,
+                user_agent: data.dns_request_device_user_agent || '',
+            };
+            delete data.dns_request_device_enabled;
+            delete data.dns_request_device_user_agent;
+        }
+
         await apiClient.setDnsConfig(data);
 
         if (hasDnsSettings) {
