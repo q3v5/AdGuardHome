@@ -72,6 +72,10 @@ const dnsConfig = handleActions(
         dnssec_enabled: false,
         upstream_dns_file: '',
         client_id: '',
+        dns_request_device: {
+            enabled: false,
+            user_agent: '',
+        },
     },
 );
 

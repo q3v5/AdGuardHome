@@ -147,6 +147,9 @@ type Config struct {
 	// EDNSClientSubnet is the settings list for EDNS Client Subnet.
 	EDNSClientSubnet *EDNSClientSubnet `yaml:"edns_client_subnet"`
 
+	// DNSRequestDevice contains custom device identification settings.
+	DNSRequestDevice *DNSRequestDevice `yaml:"dns_request_device"`
+
 	// MaxGoroutines is the max number of parallel goroutines for processing
 	// incoming requests.
 	MaxGoroutines uint `yaml:"max_goroutines"`
@@ -186,6 +189,16 @@ type EDNSClientSubnet struct {
 
 	// UseCustom defines if CustomIP should be used.
 	UseCustom bool `yaml:"use_custom"`
+}
+
+// DNSRequestDevice contains the device identification settings sent in DNS requests.
+type DNSRequestDevice struct {
+	// Enabled defines if custom device identification is enabled.
+	Enabled bool `yaml:"enabled"`
+
+	// UserAgent is the custom User-Agent string sent in HTTP headers for
+	// DNS-over-HTTPS and DNS-over-QUIC requests.
+	UserAgent string `yaml:"user_agent"`
 }
 
 // TLSConfig contains the TLS configuration settings for DNSCrypt,

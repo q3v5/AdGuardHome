@@ -5,12 +5,19 @@ import (
 	"fmt"
 	"log/slog"
 	"sync"
+	"unicode"
 
 	"github.com/AdguardTeam/dnsproxy/proxy"
 	"github.com/AdguardTeam/dnsproxy/upstream"
 	"github.com/AdguardTeam/golibs/errors"
 	"github.com/AdguardTeam/golibs/logutil/slogutil"
 	"github.com/miekg/dns"
+)
+
+// DNSRequestDevice validation constants.
+const (
+	// maxUserAgentLen is the maximum allowed length for the User-Agent string.
+	maxUserAgentLen = 256
 )
 
 // upstreamConfigValidator parses each section of an upstream configuration into
@@ -427,4 +434,46 @@ func (h *healthchecker) check(u upstream.Upstream) (err error) {
 	}
 
 	return nil
+}
+
+// validateDNSRequestDevice validates the DNSRequestDevice configuration.
+// It returns an error if the configuration is invalid.
+func validateDNSRequestDevice(d *DNSRequestDevice) (err error) {
+	if d == nil {
+		return nil
+	}
+
+	if d.Enabled && d.UserAgent == "" {
+		return errors.Error("user_agent is required when dns_request_device is enabled")
+	}
+
+	if len(d.UserAgent) > maxUserAgentLen {
+		return fmt.Errorf("user_agent length must not exceed %d characters", maxUserAgentLen)
+	}
+
+	if !isValidUserAgent(d.UserAgent) {
+		return errors.Error("user_agent contains invalid characters")
+	}
+
+	return nil
+}
+
+// isValidUserAgent checks if the User-Agent string contains only valid characters.
+// A valid User-Agent should not contain control characters or newlines.
+func isValidUserAgent(ua string) (ok bool) {
+	if ua == "" {
+		return true
+	}
+
+	for _, r := range ua {
+		if r == '\n' || r == '\r' || r == '\t' {
+			return false
+		}
+
+		if r < ' ' || r == unicode.MaxRune {
+			return false
+		}
+	}
+
+	return true
 }

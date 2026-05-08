@@ -492,6 +492,11 @@ func (s *Server) Prepare(ctx context.Context, conf *ServerConfig) (err error) {
 		}
 	}
 
+	err = validateDNSRequestDevice(s.conf.DNSRequestDevice)
+	if err != nil {
+		return fmt.Errorf("validating dns_request_device: %w", err)
+	}
+
 	s.initDefaultSettings()
 
 	err = s.prepareInternalDNS(ctx)
@@ -544,7 +549,7 @@ func (s *Server) prepareUpstreamSettings(ctx context.Context, boot upstream.Reso
 		return fmt.Errorf("loading upstreams: %w", err)
 	}
 
-	uc, err := newUpstreamConfig(ctx, s.logger, upstreams, defaultDNS, &upstream.Options{
+	opts := &upstream.Options{
 		Logger:       aghslog.NewForUpstream(s.baseLogger, aghslog.UpstreamTypeMain),
 		Bootstrap:    boot,
 		Timeout:      s.conf.UpstreamTimeout,
@@ -560,7 +565,10 @@ func (s *Server) prepareUpstreamSettings(ctx context.Context, boot upstream.Reso
 		RootCAs:      s.conf.TLSv12Roots,
 		CipherSuites: s.conf.TLSCiphers,
 		ClientID:     s.conf.ClientID,
-	})
+	}
+	setDNSRequestDeviceOptions(opts, s.conf.DNSRequestDevice)
+
+	uc, err := newUpstreamConfig(ctx, s.logger, upstreams, defaultDNS, opts)
 	if err != nil {
 		return fmt.Errorf("preparing upstream config: %w", err)
 	}
